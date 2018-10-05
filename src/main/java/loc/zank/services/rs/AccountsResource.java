@@ -13,42 +13,38 @@ import java.util.concurrent.atomic.AtomicInteger;
 @Path("/accounts")
 public class AccountsResource {
 
-    private static Map<Integer, Account> accountMap = AccountDAO.getAccountMap();
-    private static AtomicInteger idCounter = AccountDAO.getIdCounter();
-
-    @POST
-    public Response createAccount() {
-        Account account = new Account(AccountsResource.idCounter.incrementAndGet());
-        AccountsResource.accountMap.put(account.getId(), account);
-        return Response.created(URI.create("/accounts/" + account.getId())).build();
-    }
-
     @GET
     @Produces("application/json")
     public Map<Integer, Account> getAccounts() {
-        return AccountsResource.accountMap;
+        return AccountDAO.getAccountMap();
     }
 
     @GET
     @Path("{id}")
     @Produces("text/plain")
     public String getAccount(@PathParam("id") int id) {
-        return String.valueOf(AccountsResource.accountMap.get(id).getSum());
+        return String.valueOf(AccountDAO.getAccount(id).getSum());
+    }
+
+    @POST
+    public Response createAccount() {
+        Account account = AccountDAO.createAccount();
+        return Response.created(URI.create("/accounts/" + account.getId())).build();
     }
 
     @PUT
     @Path("{id}")
     @Produces("application/json")
-    public void addSum(@PathParam("id") int id, HashMap<String, Integer> in) {
-        Account account = AccountsResource.accountMap.get(id);
-        account.setSum(account.getSum() + in.get("sum"));
+    public Response addSum(@PathParam("id") int id, HashMap<String, Integer> in) {
+        AccountDAO.updateAccount(id, in.get("sum"));
+        return Response.ok().build();
     }
 
     @DELETE
     @Path("{id}")
-    public void deleteAccount(@PathParam("id") int id) {
-        AccountsResource.accountMap.remove(id);
+    public Response deleteAccount(@PathParam("id") int id) {
+        AccountDAO.removeAccount(id);
+        return Response.ok().build();
     }
-
 
 }
