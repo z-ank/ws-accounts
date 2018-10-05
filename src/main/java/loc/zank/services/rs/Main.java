@@ -1,4 +1,4 @@
-package loc.zank.services;
+package loc.zank.services.rs;
 
 import loc.zank.services.rs.AccountsResource;
 
