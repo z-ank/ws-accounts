@@ -1,7 +1,5 @@
 package loc.zank.services.rs;
 
-import loc.zank.services.rs.AccountsResource;
-
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;
 import java.util.HashSet;
