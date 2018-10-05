@@ -25,6 +25,12 @@ public class AccountDAO {
         return account;
     }
 
+    public static Account createAccount(int id, int sum) {
+        Account account = new Account(id, sum);
+        AccountDAO.accountMap.put(account.getId(), account);
+        return account;
+    }
+
     public static Account getAccount(int id) {
         return AccountDAO.accountMap.get(id);
     }

@@ -31,6 +31,15 @@ public class AccountsResource {
         return Response.created(URI.create("/accounts/" + account.getId())).build();
     }
 
+    @POST
+    @Path("/add")
+    public Response createAccount(@FormParam("id") int id, @FormParam("sum") int sum) {
+        Account account = AccountDAO.createAccount(id, sum);
+        return Response.status(Response.Status.CREATED)
+                .entity("Account #" + id + " sum = " + sum)
+                .build();
+    }
+
     @PUT
     @Path("{id}")
     @Produces("application/json")
