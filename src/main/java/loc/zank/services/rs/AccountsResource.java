@@ -13,16 +13,18 @@ import java.util.Map;
 public class AccountsResource {
 
     @GET
-    @Produces("application/json")
-    public Map<Integer, Account> getAccounts() {
-        return AccountDAO.getAccountMap();
+    public Response getAccounts() {
+        return Response.status(Response.Status.OK)
+                .entity(AccountDAO.getAccountMap().toString())
+                .build();
     }
 
     @GET
     @Path("{id}")
-    @Produces("text/plain")
-    public String getAccount(@PathParam("id") int id) {
-        return String.valueOf(AccountDAO.getAccount(id).getSum());
+    public Response getAccount(@PathParam("id") int id) {
+        return Response.status(Response.Status.OK)
+                .entity(AccountDAO.getAccount(id))
+                .build();
     }
 
     @POST
@@ -42,10 +44,11 @@ public class AccountsResource {
 
     @PUT
     @Path("{id}")
-    @Produces("application/json")
-    public Response addSum(@PathParam("id") int id, HashMap<String, Integer> in) {
-        AccountDAO.updateAccount(id, in.get("sum"));
-        return Response.ok().build();
+    public Response addSum(@PathParam("id") int id, @FormParam("sum") int sum) {
+        AccountDAO.updateAccount(id, sum);
+        return Response.ok()
+                .entity(AccountDAO.getAccount(id).toString())
+                .build();
     }
 
     @DELETE
